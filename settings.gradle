@@ -1,2 +1,5 @@
 rootProject.name = "Marvel-Android-App"
 include ':app'
+include ':domain'
+include ':data'
+include ':di'
