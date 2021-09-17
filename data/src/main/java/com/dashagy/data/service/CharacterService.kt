@@ -22,4 +22,16 @@ class CharacterService {
         }
         return ResultWrapper.Failure(Exception("Bad request/response"))
     }
+
+    fun getAllCharacters(): ResultWrapper<List<MarvelCharacter>> {
+        val callResponse = api.createService(MarvelApi::class.java).getAllCharacters()
+        val response = callResponse.execute()
+        if (response != null){
+            if (response.isSuccessful){
+                response.body()?.data?.characters.let { characters -> characters?.map { mapper.transform(it)}}?.let { return ResultWrapper.Success(it)}
+            }
+            return ResultWrapper.Failure(Exception(response.message()))
+        }
+        return ResultWrapper.Failure(Exception("Bad request/response"))
+    }
 }

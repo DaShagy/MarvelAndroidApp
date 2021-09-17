@@ -1,6 +1,7 @@
 package com.dashagy.marvelandroidapp
 
 import android.app.Application
+import com.dashagy.di.mappersModule
 import com.dashagy.di.repositoriesModule
 import com.dashagy.di.useCasesModule
 import com.dashagy.marvelandroidapp.di.viewModelsModule
@@ -13,7 +14,7 @@ class SampleApp : Application() {
         Realm.init(this)
 
         startKoin {
-            modules(listOf(repositoriesModule, viewModelsModule, useCasesModule))
+            modules(listOf(repositoriesModule, viewModelsModule, useCasesModule, mappersModule))
         }
     }
 }

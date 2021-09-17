@@ -9,7 +9,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:5.2.0"
+        classpath "io.realm:realm-gradle-plugin:6.0.2"
     }
 }
 realm {
@@ -18,7 +18,6 @@ realm {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "31.0.0"
 
     defaultConfig {
         minSdkVersion 21

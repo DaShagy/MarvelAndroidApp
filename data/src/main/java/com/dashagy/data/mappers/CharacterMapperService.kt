@@ -11,7 +11,7 @@ class CharacterMapperService : BaseMapperRepository<CharacterResponse, MarvelCha
             type.id,
             type.name,
             type.description,
-            type.thumbnail.path + type.thumbnail.extension
+            "${type.thumbnail.path}.${type.thumbnail.extension}"
         )
 
     override fun transformToRepository(type: MarvelCharacter) =

@@ -22,6 +22,17 @@ class MarvelCharacterRepositoryImpl(
             characterDatabase.getCharacterById(id)
         }
 
+    override fun getAllCharacters(getFromRemote: Boolean): ResultWrapper<List<MarvelCharacter>> =
+        if (getFromRemote) {
+            val marvelCharacterResultList = characterService.getAllCharacters()
+            if (marvelCharacterResultList is ResultWrapper.Success){
+                marvelCharacterResultList.data.map { insertOrUpdateCharacter(it)}
+            }
+            marvelCharacterResultList
+        } else {
+            characterDatabase.getAllCharacters()
+        }
+
     private fun insertOrUpdateCharacter(character: MarvelCharacter) {
         characterDatabase.insertOrUpdateCharacter(character)
     }

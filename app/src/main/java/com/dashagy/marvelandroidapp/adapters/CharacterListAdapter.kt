@@ -3,13 +3,14 @@ package com.dashagy.marvelandroidapp.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.dashagy.domain.entities.MarvelCharacter
 import com.dashagy.marvelandroidapp.databinding.ListMarvelCharactersBinding
 
 class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.CharacterViewHolder>() {
 
-    private var dataset = mutableListOf<String>()
+    private var dataset = mutableListOf<MarvelCharacter>()
 
-    fun updateDataset(dataset: MutableList<String>){
+    fun updateDataset(dataset: MutableList<MarvelCharacter>){
         this.dataset = dataset
     }
 
@@ -24,7 +25,7 @@ class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.Character
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         with (holder){
             with(dataset[position]){
-                binding.name.text = this
+                binding.name.text = this.name
             }
         }
     }

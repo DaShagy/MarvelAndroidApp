@@ -22,17 +22,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="Remote"
-        app:layout_constraintEnd_toStartOf="@+id/buttonSearchLocale"
+        app:layout_constraintEnd_toStartOf="@+id/buttonSearchLocal"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonSearchLocale"
+        android:id="@+id/buttonSearchLocal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="Locale"
+        android:text="Local"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/buttonSearchRemote"

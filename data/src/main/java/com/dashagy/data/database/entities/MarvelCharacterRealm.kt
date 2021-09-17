@@ -7,8 +7,8 @@ import io.realm.annotations.PrimaryKey
 
 open class MarvelCharacterRealm (
     @PrimaryKey
-    val id: Int = DEFAULT_ID,
-    val name: String = EMPTY_STRING,
-    val description: String = EMPTY_STRING,
-    val image: String = EMPTY_STRING
+    var id: Int = DEFAULT_ID,
+    var name: String = EMPTY_STRING,
+    var description: String = EMPTY_STRING,
+    var image: String = EMPTY_STRING
 ) : RealmObject()

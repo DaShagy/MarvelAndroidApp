@@ -10,4 +10,7 @@ import retrofit2.http.Path
 interface MarvelApi {
     @GET("/v1/public/characters/{characterId}")
     fun getCharacterById(@Path("characterId")id: Int): Call<MarvelBaseResponse<DatabaseResponse<ArrayList<CharacterResponse>>>>
+
+    @GET("/v1/public/characters")
+    fun getAllCharacters(): Call<MarvelBaseResponse<DatabaseResponse<ArrayList<CharacterResponse>>>>
 }

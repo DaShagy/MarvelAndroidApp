@@ -5,4 +5,5 @@ import com.dashagy.domain.util.ResultWrapper
 
 interface MarvelCharacterRepository {
     fun getCharacterById(id: Int, getFromRemote: Boolean) : ResultWrapper<MarvelCharacter>
+    fun getAllCharacters(getFromRemote: Boolean): ResultWrapper<List<MarvelCharacter>>
 }

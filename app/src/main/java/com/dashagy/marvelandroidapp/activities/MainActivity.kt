@@ -21,9 +21,6 @@ class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
-    //------
-    //private var fakeRepository = mutableListOf("John", "Jack", "Jill")
-    //------
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +36,16 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
 
-        //setFakeData(fakeRepository)
+        binding.buttonSearchLocal.setOnClickListener{
+            onLocalSearchClicked()
+        }
+
+        binding.buttonSearchRemote.setOnClickListener{
+            onRemoteSearchClicked()
+        }
     }
 
-    private fun updateUI(dataWrapper: DataStatus<MarvelCharacter>) {
+    private fun updateUI(dataWrapper: DataStatus<List<MarvelCharacter>>) {
         when (dataWrapper) {
             is DataStatus.Error -> {
                 dataWrapper.error.message.let {
@@ -51,22 +54,26 @@ class MainActivity : AppCompatActivity() {
             }
             is DataStatus.Loading -> {            }
             is DataStatus.Successful -> {
-                dataWrapper.data.let {
-                    showMessage(this, it.toString())
-                }
+                setCharacterList(dataWrapper.data)
             }
         }
 
+    }
+
+    private fun setCharacterList(data: List<MarvelCharacter>){
+        adapter.updateDataset(data as MutableList<MarvelCharacter>)
+        adapter.notifyDataSetChanged()
     }
 
     private fun showMessage(context: Context, message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
-    //------
-    private fun setFakeData(data: MutableList<String>){
-        adapter.updateDataset(data)
-        adapter.notifyDataSetChanged()
+    private fun onRemoteSearchClicked(){
+        viewModel.onRemoteSearchClicked()
     }
-    //------
+
+    private fun onLocalSearchClicked(){
+        viewModel.onLocalSearchClicked()
+    }
 }
