@@ -23,8 +23,13 @@ class CharacterService {
         return ResultWrapper.Failure(Exception("Bad request/response"))
     }
 
-    fun getAllCharacters(): ResultWrapper<List<MarvelCharacter>> {
-        val callResponse = api.createService(MarvelApi::class.java).getAllCharacters()
+    private fun getCharacters(offset: Int, limit: Int): ResultWrapper<List<MarvelCharacter>> {
+
+        val filter = HashMap<String, String>()
+        filter["offset"] = offset.toString()
+        filter["limit"] = limit.toString()
+
+        val callResponse = api.createService(MarvelApi::class.java).getAllCharacters(filter)
         val response = callResponse.execute()
         if (response != null){
             if (response.isSuccessful){
@@ -33,5 +38,29 @@ class CharacterService {
             return ResultWrapper.Failure(Exception(response.message()))
         }
         return ResultWrapper.Failure(Exception("Bad request/response"))
+    }
+
+    // Function return every character in service/database. Could be refactored
+
+    fun getAllCharacters(): ResultWrapper<List<MarvelCharacter>> {
+        var offset = 0
+        val limit = 20
+        val resultList: MutableList<MarvelCharacter> = mutableListOf()
+
+        while (true){
+            when (val call = getCharacters(offset, limit)){
+                is ResultWrapper.Success -> {
+                    if (call.data.isNotEmpty()){
+                        offset += limit
+                        resultList.addAll(call.data)
+                    } else break
+                }
+                is ResultWrapper.Failure -> {
+                    return ResultWrapper.Failure(Exception("Bad request/response"))
+                }
+            }
+        }
+
+        return ResultWrapper.Success(resultList as List<MarvelCharacter>)
     }
 }
