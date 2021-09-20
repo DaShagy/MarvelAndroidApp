@@ -11,12 +11,12 @@ class CharacterService {
     private val api: MarvelRequestGenerator = MarvelRequestGenerator()
     private val mapper: CharacterMapperService = CharacterMapperService()
 
-    fun getCharacterById(id: Int): ResultWrapper<MarvelCharacter> {
+    fun getCharacterById(id: Int): ResultWrapper<List<MarvelCharacter>> {
         val callResponse = api.createService(MarvelApi::class.java).getCharacterById(id)
         val response = callResponse.execute()
         if (response != null) {
             if (response.isSuccessful) {
-                response.body()?.data?.characters?.get(ZERO)?.let { mapper.transform(it) }?.let { return ResultWrapper.Success(it) }
+                response.body()?.data?.characters?.get(ZERO)?.let { mapper.transform(it) }?.let { return ResultWrapper.Success(listOf(it)) }
             }
             return ResultWrapper.Failure(Exception(response.message()))
         }

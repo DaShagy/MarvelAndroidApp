@@ -10,10 +10,10 @@ class CharacterDatabase {
 
     private val localMapper = CharacterMapperLocal()
 
-    fun getCharacterById(id: Int): ResultWrapper<MarvelCharacter> {
+    fun getCharacterById(id: Int): ResultWrapper<List<MarvelCharacter>> {
         Realm.getDefaultInstance().use {
             val character = it.where(MarvelCharacterRealm::class.java).equalTo("id", id).findFirst()
-            character?.let { return ResultWrapper.Success(localMapper.transform(character)) }
+            character?.let { return ResultWrapper.Success(listOf(localMapper.transform(character))) }
             return ResultWrapper.Failure(Exception("Character not found"))
         }
     }
