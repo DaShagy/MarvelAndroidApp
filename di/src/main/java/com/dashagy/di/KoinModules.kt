@@ -8,6 +8,7 @@ import com.dashagy.data.service.CharacterService
 import com.dashagy.domain.repositories.MarvelCharacterRepository
 import com.dashagy.domain.usecases.GetAllCharactersUseCase
 import com.dashagy.domain.usecases.GetCharacterByIdUseCase
+import com.dashagy.domain.usecases.GetCharactersByNameUseCase
 import org.koin.dsl.module
 
 val repositoriesModule = module {
@@ -19,6 +20,7 @@ val repositoriesModule = module {
 val useCasesModule = module {
     single { GetCharacterByIdUseCase() }
     single { GetAllCharactersUseCase() }
+    single { GetCharactersByNameUseCase() }
 }
 
 val mappersModule = module {

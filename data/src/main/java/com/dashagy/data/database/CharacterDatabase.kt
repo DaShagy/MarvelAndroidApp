@@ -30,6 +30,17 @@ class CharacterDatabase {
         return ResultWrapper.Failure(Exception("Character not found"))
     }
 
+    fun getCharactersByName(name: String): ResultWrapper<List<MarvelCharacter>> {
+        Realm.getDefaultInstance().use {
+            val characterList = it.where(MarvelCharacterRealm::class.java).beginsWith("name", name).findAll()
+            characterList?.let {
+                return ResultWrapper.Success(characterList.map { character ->
+                    localMapper.transform(character)
+            }) }
+            return ResultWrapper.Failure(Exception("Character not found"))
+        }
+    }
+
     fun insertOrUpdateCharacter(character: MarvelCharacter) {
         Realm.getDefaultInstance().use {
             it.executeTransaction { realm ->

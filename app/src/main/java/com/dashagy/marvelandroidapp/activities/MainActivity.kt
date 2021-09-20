@@ -3,11 +3,14 @@ package com.dashagy.marvelandroidapp.activities
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.widget.Toast
 import com.dashagy.domain.entities.MarvelCharacter
 import com.dashagy.marvelandroidapp.adapters.CharacterListAdapter
 import com.dashagy.marvelandroidapp.databinding.ActivityMainBinding
 import com.dashagy.marvelandroidapp.utils.DataStatus
+import com.dashagy.marvelandroidapp.utils.Input
+import com.dashagy.marvelandroidapp.utils.evaluateInput
 import com.dashagy.marvelandroidapp.viewmodels.CharacterViewModel
 import kotlinx.android.synthetic.main.activity_main.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,12 +39,14 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         recyclerView.setHasFixedSize(true)
 
+        val input = binding.searchCharacterEditText.text
+
         binding.buttonSearchLocal.setOnClickListener{
-            onLocalSearchClicked()
+            onLocalSearchClicked(input)
         }
 
         binding.buttonSearchRemote.setOnClickListener{
-            onRemoteSearchClicked()
+            onRemoteSearchClicked(input)
         }
     }
 
@@ -69,11 +74,21 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
-    private fun onRemoteSearchClicked(){
-        viewModel.onRemoteSearchClicked()
+    private fun onRemoteSearchClicked(input: Editable) {
+        viewModel.onRemoteSearchClicked(input.toString())
+        when (val evaluator = evaluateInput(input.toString())){
+            is Input.EmptyStringInput -> showMessage(this, "${evaluator.input} is a Empty String")
+            is Input.NumberInput -> showMessage(this, "${evaluator.input} is a Number")
+            is Input.StringInput -> showMessage(this, "${evaluator.input} is a String")
+        }
     }
 
-    private fun onLocalSearchClicked(){
-        viewModel.onLocalSearchClicked()
+    private fun onLocalSearchClicked(input: Editable) {
+        viewModel.onLocalSearchClicked(input.toString())
+        when (val evaluator = evaluateInput(input.toString())){
+            is Input.EmptyStringInput -> showMessage(this, "${evaluator.input} is a Empty String")
+            is Input.NumberInput -> showMessage(this, "${evaluator.input} is a Number")
+            is Input.StringInput -> showMessage(this, "${evaluator.input} is a String")
+        }
     }
 }
