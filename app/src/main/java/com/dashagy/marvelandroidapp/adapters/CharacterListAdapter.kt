@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dashagy.domain.entities.MarvelCharacter
 import com.dashagy.marvelandroidapp.databinding.ListMarvelCharactersBinding
 
-class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.CharacterViewHolder>() {
+class CharacterListAdapter (private val listener: (MarvelCharacter) -> Unit )
+    : RecyclerView.Adapter<CharacterListAdapter.CharacterViewHolder>() {
 
     private var dataset = mutableListOf<MarvelCharacter>()
 
@@ -14,12 +15,21 @@ class CharacterListAdapter : RecyclerView.Adapter<CharacterListAdapter.Character
         this.dataset = dataset
     }
 
-    class CharacterViewHolder(val binding: ListMarvelCharactersBinding)
-        : RecyclerView.ViewHolder(binding.root)
+    class CharacterViewHolder(
+        val binding: ListMarvelCharactersBinding,
+        val onClickItem: (Int) -> Unit
+    )
+        : RecyclerView.ViewHolder(binding.root){
+            init {
+                binding.root.setOnClickListener {
+                    onClickItem(absoluteAdapterPosition)
+                }
+            }
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val binding = ListMarvelCharactersBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return CharacterViewHolder(binding)
+        return CharacterViewHolder(binding) { listener(dataset[it]) }
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {

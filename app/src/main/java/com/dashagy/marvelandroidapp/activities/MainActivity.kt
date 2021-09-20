@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.dashagy.domain.entities.MarvelCharacter
 import com.dashagy.marvelandroidapp.adapters.CharacterListAdapter
 import com.dashagy.marvelandroidapp.databinding.ActivityMainBinding
+import com.dashagy.marvelandroidapp.ui.dialogs.CharacterDetailsAlertDialog
 import com.dashagy.marvelandroidapp.utils.DataStatus
 import com.dashagy.marvelandroidapp.utils.Input
 import com.dashagy.marvelandroidapp.utils.evaluateInput
@@ -33,7 +34,9 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = CharacterListAdapter()
+        adapter = CharacterListAdapter {
+            character -> onListCharacterClicked(character)
+        }
 
         viewModel.mainState.observe(::getLifecycle, ::updateUI)
 
@@ -100,5 +103,10 @@ class MainActivity : AppCompatActivity() {
         buttonSearchLocal.visibility = View.VISIBLE
         buttonSearchRemote.visibility = View.VISIBLE
         searchCharacterEditText.visibility = View.VISIBLE
+    }
+
+    private fun onListCharacterClicked (character: MarvelCharacter){
+        val alertDialog = CharacterDetailsAlertDialog(character)
+        alertDialog.show(supportFragmentManager, "recycler_view_item")
     }
 }
