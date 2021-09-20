@@ -4,6 +4,7 @@ import com.dashagy.data.database.entities.MarvelCharacterRealm
 import com.dashagy.data.mappers.CharacterMapperLocal
 import com.dashagy.domain.entities.MarvelCharacter
 import com.dashagy.domain.util.ResultWrapper
+import io.realm.Case
 import io.realm.Realm
 
 class CharacterDatabase {
@@ -32,7 +33,7 @@ class CharacterDatabase {
 
     fun getCharactersByName(name: String): ResultWrapper<List<MarvelCharacter>> {
         Realm.getDefaultInstance().use {
-            val characterList = it.where(MarvelCharacterRealm::class.java).beginsWith("name", name).findAll()
+            val characterList = it.where(MarvelCharacterRealm::class.java).beginsWith("name", name, Case.INSENSITIVE).findAll()
             characterList?.let {
                 return ResultWrapper.Success(characterList.map { character ->
                     localMapper.transform(character)
