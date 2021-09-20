@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.view.View
 import android.widget.Toast
 import com.dashagy.domain.entities.MarvelCharacter
 import com.dashagy.marvelandroidapp.adapters.CharacterListAdapter
@@ -12,6 +13,7 @@ import com.dashagy.marvelandroidapp.utils.DataStatus
 import com.dashagy.marvelandroidapp.utils.Input
 import com.dashagy.marvelandroidapp.utils.evaluateInput
 import com.dashagy.marvelandroidapp.viewmodels.CharacterViewModel
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -53,12 +55,14 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI(dataWrapper: DataStatus<List<MarvelCharacter>>) {
         when (dataWrapper) {
             is DataStatus.Error -> {
+                hideProgress()
                 dataWrapper.error.message.let {
                     showMessage(this, it ?: "No se pudo recuperar el mensaje de error")
                 }
             }
-            is DataStatus.Loading -> {            }
+            is DataStatus.Loading -> { showProgress() }
             is DataStatus.Successful -> {
+                hideProgress()
                 setCharacterList(dataWrapper.data)
             }
         }
@@ -76,19 +80,25 @@ class MainActivity : AppCompatActivity() {
 
     private fun onRemoteSearchClicked(input: Editable) {
         viewModel.onRemoteSearchClicked(input.toString())
-        when (val evaluator = evaluateInput(input.toString())){
-            is Input.EmptyStringInput -> showMessage(this, "${evaluator.input} is a Empty String")
-            is Input.NumberInput -> showMessage(this, "${evaluator.input} is a Number")
-            is Input.StringInput -> showMessage(this, "${evaluator.input} is a String")
-        }
     }
 
     private fun onLocalSearchClicked(input: Editable) {
         viewModel.onLocalSearchClicked(input.toString())
-        when (val evaluator = evaluateInput(input.toString())){
-            is Input.EmptyStringInput -> showMessage(this, "${evaluator.input} is a Empty String")
-            is Input.NumberInput -> showMessage(this, "${evaluator.input} is a Number")
-            is Input.StringInput -> showMessage(this, "${evaluator.input} is a String")
-        }
+    }
+
+    private fun showProgress() {
+        progress.visibility = View.VISIBLE
+        main_recyclerview.visibility = View.GONE
+        buttonSearchLocal.visibility = View.GONE
+        buttonSearchRemote.visibility = View.GONE
+        searchCharacterEditText.visibility = View.GONE
+    }
+
+    private fun hideProgress() {
+        progress.visibility = View.GONE
+        main_recyclerview.visibility  = View.VISIBLE
+        buttonSearchLocal.visibility = View.VISIBLE
+        buttonSearchRemote.visibility = View.VISIBLE
+        searchCharacterEditText.visibility = View.VISIBLE
     }
 }
