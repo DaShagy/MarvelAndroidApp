@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.dashagy.domain.entities.MarvelCharacter
 import com.dashagy.marvelandroidapp.adapters.CharacterListAdapter
@@ -82,10 +83,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onRemoteSearchClicked(input: Editable) {
+        hideKeyboard()
         viewModel.onRemoteSearchClicked(input.toString())
     }
 
     private fun onLocalSearchClicked(input: Editable) {
+        hideKeyboard()
         viewModel.onLocalSearchClicked(input.toString())
     }
 
@@ -108,5 +111,12 @@ class MainActivity : AppCompatActivity() {
     private fun onListCharacterClicked (character: MarvelCharacter){
         val alertDialog = CharacterDetailsAlertDialog(character)
         alertDialog.show(supportFragmentManager, "recycler_view_item")
+    }
+
+    private fun hideKeyboard(){
+        if (currentFocus != null){
+            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager;
+            inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0);
+        }
     }
 }
