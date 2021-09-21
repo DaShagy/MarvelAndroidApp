@@ -45,7 +45,7 @@ class CharacterService {
 
     fun getAllCharacters(name: String = ""): ResultWrapper<List<MarvelCharacter>> {
         var offset = 0
-        val limit = 20
+        val limit = 100
         val resultList: MutableList<MarvelCharacter> = mutableListOf()
 
         while (true){
