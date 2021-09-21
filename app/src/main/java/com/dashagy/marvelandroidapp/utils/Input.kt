@@ -1,25 +1,19 @@
 package com.dashagy.marvelandroidapp.utils
 
-sealed class Input <out T : Any>{
-    class StringInput <out T: Any> (val input: T) : Input<T>()
-    class EmptyStringInput <out T: Any> (val input: T) : Input<T>()
-    class NumberInput <out T: Any> (val input: T) : Input <T>()
+sealed class Input <out String>{
+    class StringInput <out String> : Input<String>()
+    class EmptyStringInput <out String> : Input<String>()
+    class NumberInput <out String> : Input <String>()
 }
 
 fun evaluateInput(input: String) : Input<String> {
     return when (input.toIntOrNull()){
         null -> {
             when (input.isBlank()){
-                true -> Input.EmptyStringInput(input)
-                false -> Input.StringInput(input)
+                true -> Input.EmptyStringInput()
+                false -> Input.StringInput()
             }
         }
-        else -> Input.NumberInput(input)
+        else -> Input.NumberInput()
     }
 }
-
-/*when (evaluator){
-    is Input.EmptyStringInput -> getAllCharacters( false) //mutableMainState.value = DataStatus.Successful(data = result.data)
-    is Input.NumberInput -> getCharacterById(input.toInt(), false) //mutableMainState.value = DataStatus.Successful(data = listOf(result.data))
-    is Input.StringInput -> getAllCharacters( false)
-}*/
