@@ -1,0 +1,40 @@
+package com.dashagy.data.database
+
+import com.dashagy.data.database.entities.MarvelCharacterRealm
+import com.dashagy.data.mappers.CharacterMapperLocal
+import com.dashagy.domain.entities.MarvelCharacter
+import com.dashagy.domain.util.ResultWrapper
+import io.realm.Realm
+
+class CharacterDatabase {
+
+    private val localMapper = CharacterMapperLocal()
+
+    fun getCharacterById(id: Int): ResultWrapper<MarvelCharacter> {
+        Realm.getDefaultInstance().use {
+            val character = it.where(MarvelCharacterRealm::class.java).equalTo("id", id).findFirst()
+            character?.let { return ResultWrapper.Success(localMapper.transform(character)) }
+            return ResultWrapper.Failure(Exception("Character not found"))
+        }
+    }
+
+    fun getAllCharacters(): ResultWrapper<List<MarvelCharacter>>{
+        Realm.getDefaultInstance().use {
+            val characterList = it.where(MarvelCharacterRealm::class.java).findAll()
+            characterList?.let {
+                return ResultWrapper.Success(characterList.map { character ->
+                    localMapper.transform(character)
+                })
+            }
+        }
+        return ResultWrapper.Failure(Exception("Character not found"))
+    }
+
+    fun insertOrUpdateCharacter(character: MarvelCharacter) {
+        Realm.getDefaultInstance().use {
+            it.executeTransaction { realm ->
+                realm.insertOrUpdate(localMapper.transformToRepository(character))
+            }
+        }
+    }
+}
