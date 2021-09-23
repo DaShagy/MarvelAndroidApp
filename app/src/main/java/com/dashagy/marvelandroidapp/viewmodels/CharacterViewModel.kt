@@ -20,9 +20,7 @@ class CharacterViewModel(
 
     private var mutableMainState: MutableLiveData<DataStatus<List<MarvelCharacter>>> = MutableLiveData()
     val mainState: LiveData<DataStatus<List<MarvelCharacter>>>
-        get() {
-            return mutableMainState
-        }
+        get() = mutableMainState
 
     fun onRemoteSearchClicked() = viewModelScope.launch {
         mutableMainState.value = DataStatus.Loading
