@@ -21,7 +21,7 @@ class CharacterDatabase {
 
     fun getAllCharacters(): ResultWrapper<List<MarvelCharacter>>{
         Realm.getDefaultInstance().use {
-            val characterList = it.where(MarvelCharacterRealm::class.java).findAll()
+            val characterList = it.where(MarvelCharacterRealm::class.java).sort("name").findAll()
             characterList?.let {
                 return ResultWrapper.Success(characterList.map { character ->
                     localMapper.transform(character)
