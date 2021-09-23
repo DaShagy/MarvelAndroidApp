@@ -12,8 +12,6 @@ import com.dashagy.marvelandroidapp.adapters.CharacterListAdapter
 import com.dashagy.marvelandroidapp.databinding.ActivityMainBinding
 import com.dashagy.marvelandroidapp.ui.dialogs.CharacterDetailsAlertDialog
 import com.dashagy.marvelandroidapp.utils.DataStatus
-import com.dashagy.marvelandroidapp.utils.Input
-import com.dashagy.marvelandroidapp.utils.evaluateInput
 import com.dashagy.marvelandroidapp.viewmodels.CharacterViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -115,8 +113,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun hideKeyboard(){
         if (currentFocus != null){
-            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager;
-            inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0);
+            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
     }
 }
