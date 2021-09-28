@@ -11,29 +11,30 @@ class CharacterService {
     private val api: MarvelRequestGenerator = MarvelRequestGenerator()
     private val mapper: CharacterMapperService = CharacterMapperService()
 
-    fun getCharacterById(id: Int): ResultWrapper<MarvelCharacter> {
+    fun getCharacterById(id: Int): ResultWrapper<List<MarvelCharacter>> {
         val callResponse = api.createService(MarvelApi::class.java).getCharacterById(id)
         val response = callResponse.execute()
         if (response != null) {
             if (response.isSuccessful) {
-                response.body()?.data?.characters?.get(ZERO)?.let { mapper.transform(it) }?.let { return ResultWrapper.Success(it) }
+                response.body()?.data?.characters?.get(ZERO)?.let { mapper.transform(it) }?.let { return ResultWrapper.Success(listOf(it)) }
             }
             return ResultWrapper.Failure(Exception(response.message()))
         }
         return ResultWrapper.Failure(Exception("Bad request/response"))
     }
 
-    private fun getCharacters(offset: Int, limit: Int): ResultWrapper<List<MarvelCharacter>> {
+    private fun getCharacters(offset: Int, limit: Int, name: String): ResultWrapper<List<MarvelCharacter>> {
 
         val filter = HashMap<String, String>()
         filter["offset"] = offset.toString()
         filter["limit"] = limit.toString()
+        if (name.isNotBlank()) filter["nameStartsWith"] = name
 
         val callResponse = api.createService(MarvelApi::class.java).getAllCharacters(filter)
         val response = callResponse.execute()
         if (response != null){
             if (response.isSuccessful){
-                response.body()?.data?.characters.let { characters -> characters?.map { mapper.transform(it)}}?.let { return ResultWrapper.Success(it)}
+                response.body()?.data?.characters.let { characters -> characters?.map { mapper.transform(it)}}?.let { return ResultWrapper.Success(it) }
             }
             return ResultWrapper.Failure(Exception(response.message()))
         }
@@ -42,13 +43,13 @@ class CharacterService {
 
     // Function return every character in service/database. Could be refactored
 
-    fun getAllCharacters(): ResultWrapper<List<MarvelCharacter>> {
+    fun getAllCharacters(name: String = ""): ResultWrapper<List<MarvelCharacter>> {
         var offset = 0
-        val limit = 20
+        val limit = 100
         val resultList: MutableList<MarvelCharacter> = mutableListOf()
 
         while (true){
-            when (val call = getCharacters(offset, limit)){
+            when (val call = getCharacters(offset, limit, name)){
                 is ResultWrapper.Success -> {
                     if (call.data.isNotEmpty()){
                         offset += limit
