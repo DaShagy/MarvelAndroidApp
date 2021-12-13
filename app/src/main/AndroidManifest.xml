@@ -8,8 +8,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MarvelAndroidApp">
-        <activity android:name=".activities.MainActivity">
+        android:usesCleartextTraffic="true"
+        android:theme="@style/Theme.MarvelAndroidApp"
+        android:name=".SampleApp">
+        <activity android:name=".activities.MainActivity"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
